@@ -1,0 +1,10 @@
+
+.idea/.gitignore
+.idea/capshot_cron_job.iml
+.idea/dictionaries/
+.idea/misc.xml
+.idea/modules.xml
+bin/
+node_modules/
+package-lock.json
+package.json
