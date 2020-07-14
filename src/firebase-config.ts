@@ -1,7 +1,7 @@
 import admin from "firebase-admin";
 import config from './config'
 
-const serviceAccount = config.firebase_config;
+const serviceAccount = config.firebase_config || process.env.FIREBASE_CREDENTIALS;
 
 type callback = () => void;
 
