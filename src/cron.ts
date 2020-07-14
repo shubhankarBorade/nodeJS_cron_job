@@ -25,7 +25,7 @@ export class Cron {
 
 async function sendPun(): Promise<void> {
     // fetch the users who have android version code more than required
-    const users: UserProp[] = await User.getUserOfAndroidVersionCode(152);
+    const users: UserProp[] = await User.getUserOfAndroidVersionCode(154);
     const firebaseToken: string[] = users.map(user => user.firebaseToken);
 
     // send notification on 7 pm
