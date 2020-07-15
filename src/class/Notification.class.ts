@@ -1,10 +1,11 @@
 import assert from "assert";
 import util from "util";
 import {constants, pun} from '../constants';
+import firebaseAdmin from 'firebase-admin';
 
 util.debuglog('notification');
 
-import firebaseAdmin from 'firebase-admin';
+// import {AndroidNotification} from "firebase-admin/lib/messaging";
 
 interface NotificationDataProp {
     title: string,
@@ -18,7 +19,7 @@ interface NotificationMessageProp {
     data: {},
     android: {
         priority: notificationPriority,
-        collapseKey: string
+        collapseKey: string,
     },
     apns: {
         payload: {

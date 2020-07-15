@@ -13,7 +13,7 @@ interface PubProp {
 }
 
 export const constants: Constants = {
-    minimum_android_version: 153,
+    minimum_android_version: 154,
     minimum_ios_version: 153,
     availableBuckets: {
         international: 'international',

@@ -14,7 +14,7 @@ export class Cron {
 
     static async init() {
         try {
-            const everydayRunAt7 = new CronOperation('*/5 * * * * *', sendPun);
+            const everydayRunAt7 = new CronOperation('*/10 * * * * *', sendPun);
             everydayRunAt7.init();
         } catch (err) {
             console.log('error', err);
@@ -25,7 +25,7 @@ export class Cron {
 
 async function sendPun(): Promise<void> {
     // fetch the users who have android version code more than required
-    const users: UserProp[] = await User.getUserOfAndroidVersionCode(154);
+    const users: UserProp[] = await User.getUserOfAndroidVersionCode(153);
     const firebaseToken: string[] = users.map(user => user.firebaseToken);
 
     // send notification on 7 pm
