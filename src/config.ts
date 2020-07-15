@@ -26,7 +26,7 @@ const environment: Environment = {
     },
     staging: {
         name: 'staging',
-        hostname: 'localhost:3000',
+        hostname: 'localhost:5000',
         remote_server_url: 'test.capshot.xyz',
         version: 1,
         postgresql_url: 'postgres://admin:capshot2019@172.31.12.62:5432/capshot_test',
@@ -34,7 +34,7 @@ const environment: Environment = {
     },
     production: {
         name: 'production',
-        hostname: 'localhost:3000',
+        hostname: 'localhost:5001',
         remote_server_url: 'api.capshot.xyz',
         version: 1,
         postgresql_url: 'postgres://shubhankar:shubh0502@capshottest.cx8tjkw161jy.ap-south-1.rds.amazonaws.com:5432/capshot',
