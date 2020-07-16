@@ -14,7 +14,7 @@ export class Cron {
 
     static async init() {
         try {
-            const everydayRunAt7 = new CronOperation('* * 19 * * *', sendPun);
+            const everydayRunAt7 = new CronOperation('0 0 19 * * *', sendPun);
             everydayRunAt7.init();
         } catch (err) {
             console.log('error', err);
