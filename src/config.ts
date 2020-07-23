@@ -29,7 +29,7 @@ const environment: Environment = {
         hostname: 'localhost:5000',
         remote_server_url: 'test.capshot.xyz',
         version: 1,
-        postgresql_url: 'postgres://admin:capshot2019@172.31.12.62:5432/capshot_test',
+        postgresql_url: 'postgres://admin:capshot2019@test.capshot.xyz:5432/capshot_test',
         mongodb_url: 'mongodb+srv://admin:capshot_admin@2019@capshot-ixkc1.mongodb.net/capshot?retryWrites=true&w=majority'
     },
     production: {

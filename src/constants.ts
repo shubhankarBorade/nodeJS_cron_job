@@ -1,9 +1,19 @@
-interface Constants {
+export interface ConstantsProp {
     minimum_android_version: number,
     minimum_ios_version: number,
     availableBuckets: {
         international: string,
         indians: string
+    },
+    sendgrid_api_options: {
+        "method": string,
+        "hostname": string,
+        "port": null,
+        "path": string
+        "headers": {
+            "authorization": string,
+            "content-type": string
+        }
     }
 }
 
@@ -12,12 +22,22 @@ interface PubProp {
     indians: string[]
 }
 
-export const constants: Constants = {
+export const constants: ConstantsProp = {
     minimum_android_version: 154,
     minimum_ios_version: 153,
     availableBuckets: {
         international: 'international',
         indians: 'indians'
+    },
+    sendgrid_api_options: {
+        "method": "POST",
+        "hostname": "api.sendgrid.com",
+        "port": null,
+        "path": "/v3/mail/send",
+        "headers": {
+            "authorization": "Bearer " + process.env.SENDGRID_API_KEY,
+            "content-type": "application/json"
+        }
     }
 }
 
