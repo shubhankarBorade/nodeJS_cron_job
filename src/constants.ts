@@ -1,3 +1,22 @@
+import {RequestOptionsProp} from "./class/Request.class";
+
+
+type emailBodyContentType = 'text/html'
+
+interface EmailBody {
+    personalizations:
+        [{
+            to: [{ email: string }]
+        }],
+    from: { email: string, name: string },
+    subject: string,
+    content: [{
+        "type": emailBodyContentType,
+        "value": string
+    }],
+    reply_to: { email: string, name: string },
+}
+
 export interface ConstantsProp {
     minimum_android_version: number,
     minimum_ios_version: number,
@@ -5,16 +24,8 @@ export interface ConstantsProp {
         international: string,
         indians: string
     },
-    sendgrid_api_options: {
-        "method": string,
-        "hostname": string,
-        "port": null,
-        "path": string
-        "headers": {
-            "authorization": string,
-            "content-type": string
-        }
-    }
+    sendgrid_api_options: RequestOptionsProp,
+    serverFailedEmail: EmailBody
 }
 
 interface PubProp {
@@ -37,7 +48,21 @@ export const constants: ConstantsProp = {
         "headers": {
             "authorization": "Bearer " + process.env.SENDGRID_API_KEY,
             "content-type": "application/json"
-        }
+        },
+        timeout: 1000
+    },
+    serverFailedEmail: {
+        personalizations:
+            [{
+                to: [{email: 'shborade@gmail.com'}]
+            }],
+        from: {email: 'shubhankar@dirtcube.xyz', name: 'Capshot'},
+        subject: 'Server down test email',
+        content: [{
+            "type": "text/html",
+            "value": 'Server is down'
+        }],
+        reply_to: {email: 'shubhankar@dirtcube.xyz', name: 'Capshot'},
     }
 }
 

@@ -9,8 +9,10 @@ interface ErrorProp {
     code?: string
 }
 
-interface RequestOptionsProp {
-    "method": string,
+type method = 'GET' | 'POST' | 'PUT' | 'DELETE'
+
+export interface RequestOptionsProp {
+    "method": method,
     "hostname": string,
     "port": number | null,
     "path": string
@@ -18,7 +20,8 @@ interface RequestOptionsProp {
         "authorization"?: string,
         "content-type": string,
         "content-length"?: number | string
-    }
+    },
+    timeout: number
 }
 
 export interface ResponseBody {
@@ -26,7 +29,7 @@ export interface ResponseBody {
     body: any
 }
 
-export class RequestClass {
+export class Request {
     constructor() {
     }
 
@@ -41,8 +44,8 @@ export class RequestClass {
             // Stringify the payload
             const stringPayload = typeof requestPayload === 'string' ? requestPayload : JSON.stringify(requestPayload);
 
-            const req = https.request(requestOptions, async (res: IncomingMessage) => {
-                return await this.handleResponse(res);
+            const req = https.request(requestOptions, async (res: IncomingMessage): Promise<void> => {
+                return resolve(await this.handleResponse(res));
             })
 
             // Bind to the error event
@@ -73,7 +76,7 @@ export class RequestClass {
      * @param requestPayload
      * @param requestOptions
      */
-    sendHttpResponse = (requestPayload, requestOptions: RequestOptionsProp): Promise<ResponseBody> => {
+    sendHttpRequest = (requestPayload, requestOptions: RequestOptionsProp): Promise<ResponseBody> => {
         return new Promise(async (resolve) => {
             // Stringify the payload
             const stringPayload = typeof requestPayload === 'string' ? requestPayload : JSON.stringify(requestPayload);
@@ -116,17 +119,27 @@ export class RequestClass {
             res.on('end', () => {
                 const status = res.statusCode;
                 debuglog('status', status);
-                debuglog('responseBody', responseBody ? JSON.parse(responseBody) : null);
+                debuglog('responseBody', responseBody);
+                const contentType = res.headers["content-type"]
+
+                function parseIfJSON() {
+                    if (contentType && contentType.indexOf("application/json") !== -1) {
+                        return JSON.parse(responseBody)
+                    } else {
+                        return responseBody;
+                    }
+                }
+
                 // Callback successfully if the request went through
                 if (status === 200 || status === 201 || status === 202) {
                     return resolve({
                         statusCode: 200,
-                        body: responseBody ? JSON.parse(responseBody) : null
+                        body: responseBody ? parseIfJSON() : null
                     })
                 } else {
                     return resolve({
                         statusCode: status,
-                        body: responseBody ? JSON.parse(responseBody) : null
+                        body: responseBody ? parseIfJSON() : null
                     });
                 }
             })
