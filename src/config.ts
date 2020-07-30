@@ -1,6 +1,7 @@
 interface EnvironmentProp {
     name: string;
     hostname: string;
+    port: number;
     remote_server_url: string;
     version: number;
     postgresql_url: string;
@@ -19,6 +20,7 @@ const environment: Environment = {
     development: {
         name: 'development',
         hostname: 'localhost:3000',
+        port: 3000,
         remote_server_url: 'localhost:4000',
         version: 1,
         postgresql_url: 'postgres://localhost:5432/capshot_dev',
@@ -27,6 +29,7 @@ const environment: Environment = {
     staging: {
         name: 'staging',
         hostname: 'localhost:5000',
+        port: 5000,
         remote_server_url: 'test.capshot.xyz',
         version: 1,
         postgresql_url: 'postgres://admin:capshot2019@test.capshot.xyz:5432/capshot_test',
@@ -35,6 +38,7 @@ const environment: Environment = {
     production: {
         name: 'production',
         hostname: 'localhost:5001',
+        port: 5001,
         remote_server_url: 'api.capshot.xyz',
         version: 1,
         postgresql_url: 'postgres://shubhankar:shubh0502@capshottest.cx8tjkw161jy.ap-south-1.rds.amazonaws.com:5432/capshot',
