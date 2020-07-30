@@ -335,9 +335,15 @@
       "id": "1mQVnZNw4yhjsbuv7T_6e7khSQ76H_iEm",
       "name": "Intelligent-Dog.jpg",
       "mimeType": "image/jpeg"
+    },
+    "1sIXb5X1UzJnaM-GT6Fnp81atVUN2lwDs": {
+      "kind": "drive#file",
+      "id": "1sIXb5X1UzJnaM-GT6Fnp81atVUN2lwDs",
+      "name": "Batman-Slapping-Robin.jpg",
+      "mimeType": "image/jpeg",
+      "webContentLink": "https://drive.google.com/uc?id=1sIXb5X1UzJnaM-GT6Fnp81atVUN2lwDs&export=download"
     }
   },
-  "staging": {
-  },
+  "staging": {},
   "production": {}
 }

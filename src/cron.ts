@@ -92,7 +92,7 @@ export class Cron {
             // // const checkServerHealth2 = new CronOperation('2 * * * * *', checkProductionServerHealth2)
             // // checkServerHealth2.init();
             // // await checkProductionServerHealth()
-            await getDataFromGoogleDrive();
+            // await getDataFromGoogleDrive();
         } catch (err) {
             console.log('error', err);
             return err;
