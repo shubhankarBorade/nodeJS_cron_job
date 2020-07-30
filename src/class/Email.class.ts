@@ -11,7 +11,6 @@ export class Email {
         return new Promise(async (resolve) => {
             try {
                 const response = await this.requests.sendHttpsRequest(requestPayload, constants.sendgrid_api_options);
-                console.log('response', response);
                 return resolve(response);
             } catch (err) {
                 return resolve(false);

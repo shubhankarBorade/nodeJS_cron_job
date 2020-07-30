@@ -21,7 +21,7 @@ const environment: Environment = {
         name: 'development',
         hostname: 'localhost:3000',
         port: 3000,
-        remote_server_url: 'localhost:4000',
+        remote_server_url: 'test.capshot.xyz',
         version: 1,
         postgresql_url: 'postgres://localhost:5432/capshot_dev',
         mongodb_url: 'mongodb+srv://admin:capshot_admin@2019@capshot-ixkc1.mongodb.net/capshot?retryWrites=true&w=majority',

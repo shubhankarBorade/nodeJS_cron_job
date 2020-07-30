@@ -131,3 +131,59 @@ function listFiles(auth, callback) {
         }
     );
 }
+
+// async function getDataFromGoogleDrive(): Promise<void> {
+//     try {
+//         const files: GoogleDriveFilesProp[] = await GetFiles();
+//         const jsonFilePath = path.join(__dirname + '/google-drive/backgrounds.json');
+//         fs.readFile(jsonFilePath, 'utf8', (err: Error, data: string): void => {
+//             if (err) {
+//                 console.log('error', err);
+//                 return;
+//             }
+//             const parsedData = JSON.parse(data);
+//             const dataToSend: RequestPayloadToUploadBackground = {
+//                 data: []
+//             }
+//             console.log('current env', config.name);
+//             files.map(file => {
+//                 if (!parsedData[config.name][file.id]) {
+//                     parsedData[config.name][file.id] = file;
+//                     dataToSend.data.push({
+//                         url: file.webContentLink,
+//                         name: file.name
+//                     });
+//                 }
+//             });
+//             const stringifyData = JSON.stringify(parsedData);
+//
+//             fs.writeFile(jsonFilePath, stringifyData, async (err: Error): Promise<void> => {
+//                 console.log('error', err);
+//                 if (err) return;
+//
+//                 if (dataToSend.data.length) {
+//                     // update in the database
+//                     const stringifyPayload = JSON.stringify(dataToSend);
+//                     const request = new Request();
+//                     const requestOptions: RequestOptionsProp = {
+//                         method: 'POST',
+//                         path: "/backgrounds",
+//                         port: null,
+//                         timeout: 1000,
+//                         hostname: config.remote_server_url,
+//                         headers: {
+//                             "content-type": 'application/json',
+//                             "content-length": Buffer.byteLength(stringifyPayload)
+//                         },
+//                     }
+//                     const responseFromServer = await request.sendHttpsRequest(stringifyPayload, requestOptions);
+//                     console.log('responseFromServer', responseFromServer);
+//                 }
+//             })
+//         })
+//     } catch (err) {
+//         console.log('error', err);
+//         return err;
+//     }
+// }
+

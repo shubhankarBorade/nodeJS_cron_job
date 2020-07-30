@@ -54,15 +54,15 @@ export const constants: ConstantsProp = {
     serverFailedEmail: {
         personalizations:
             [{
-                to: [{email: 'shborade@gmail.com'}]
+                to: [{email: 'shubhankar@dirtcube.xyz'}]
             }],
-        from: {email: 'shubhankar@dirtcube.xyz', name: 'Capshot'},
+        from: {email: 'team@capshot.xyz', name: 'Capshot system'},
         subject: 'Server down test email',
         content: [{
             "type": "text/html",
-            "value": 'Server is down'
+            "value": 'Server is down \n from Shubhankar Borade'
         }],
-        reply_to: {email: 'shubhankar@dirtcube.xyz', name: 'Capshot'},
+        reply_to: {email: 'team@capshot.xyz', name: 'Re : Capshot system'},
     }
 }
 
