@@ -18,6 +18,15 @@ interface UserProp {
     firebaseToken: string
 }
 
+interface RequestPayloadDataProp {
+    url: string,
+    name: string
+}
+
+interface RequestPayloadToUploadBackground {
+    data: RequestPayloadDataProp[]
+}
+
 interface GoogleDriveFilesProp {
     kind: string,
     id: string,
@@ -93,11 +102,6 @@ export class Cron {
 
 async function getDataFromGoogleDrive(): Promise<void> {
     try {
-        interface RequestPayloadToUploadBackground {
-            url: string,
-            name: string
-        }
-
         const files: GoogleDriveFilesProp[] = await GetFiles();
         let jsonFilePath = path.join(__dirname + '/google-drive/backgrounds.json');
         fs.readFile(jsonFilePath, 'utf8', (err: Error, data: string): void => {
@@ -106,22 +110,26 @@ async function getDataFromGoogleDrive(): Promise<void> {
                 return;
             }
             const parsedData = JSON.parse(data);
-            const dataToSend: RequestPayloadToUploadBackground[] = [];
+            const dataToSend: RequestPayloadToUploadBackground = {
+                data: []
+            }
+            console.log('current env', config.name);
             files.map(file => {
                 if (!parsedData[config.name][file.id]) {
-                    // parsedData[config.name][file.id] = file;
-                    dataToSend.push({
+                    parsedData[config.name][file.id] = file;
+                    dataToSend.data.push({
                         url: file.webContentLink,
                         name: file.name
                     });
                 }
             });
             const stringifyData = JSON.stringify(parsedData);
+
             fs.writeFile(jsonFilePath, stringifyData, async (err: Error): Promise<void> => {
                 console.log('error', err);
                 if (err) return;
 
-                if (dataToSend.length) {
+                if (dataToSend.data.length) {
                     // update in the database
                     const stringifyPayload = JSON.stringify(dataToSend);
                     const request = new Request();
@@ -136,7 +144,7 @@ async function getDataFromGoogleDrive(): Promise<void> {
                             "content-length": Buffer.byteLength(stringifyPayload)
                         },
                     }
-                    const responseFromServer = await request.sendHttpRequest(stringifyPayload, requestOptions);
+                    const responseFromServer = await request.sendHttpsRequest(stringifyPayload, requestOptions);
                     console.log('responseFromServer', responseFromServer);
                 }
             })
