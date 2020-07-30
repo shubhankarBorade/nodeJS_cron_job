@@ -18,6 +18,7 @@ interface RequestPayloadDataProp {
     url: string,
     name: string
 }
+
 interface GoogleDriveFilesProp {
     kind: string,
     id: string,
@@ -47,6 +48,7 @@ async function checkProductionServerHealth(monitor: Monitor, hostname: string): 
             const email = new Email();
             const serverFailedEmailPayload = JSON.stringify(constants.serverFailedEmail);
             const response = await email.sendEmail(serverFailedEmailPayload);
+            console.log('response from email', response);
             return;
         }
     } catch (err) {
