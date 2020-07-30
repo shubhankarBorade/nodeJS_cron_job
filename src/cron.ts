@@ -103,7 +103,7 @@ export class Cron {
 async function getDataFromGoogleDrive(): Promise<void> {
     try {
         const files: GoogleDriveFilesProp[] = await GetFiles();
-        let jsonFilePath = path.join(__dirname + '/google-drive/backgrounds.json');
+        const jsonFilePath = path.join(__dirname + '/google-drive/backgrounds.json');
         fs.readFile(jsonFilePath, 'utf8', (err: Error, data: string): void => {
             if (err) {
                 console.log('error', err);

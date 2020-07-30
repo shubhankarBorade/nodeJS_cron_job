@@ -21,7 +21,7 @@ interface GoogleDriveFilesProp {
     id: string,
     name: string,
     mimeType: string,
-    webContentLink : string
+    webContentLink: string
 }
 
 export function GetFiles(): Promise<GoogleDriveFilesProp[]> {
@@ -30,7 +30,9 @@ export function GetFiles(): Promise<GoogleDriveFilesProp[]> {
         fs.readFile(process.env.GOOGLE_DRIVE_CRED, "utf8", (err, content) => {
             if (err) return console.log("Error loading client secret file:", err);
             // Authorize a client with credentials, then call the Google Drive API.
-            authorize(JSON.parse(content), listFiles).then((result: GoogleDriveFilesProp[]) => resolve(result));
+            authorize(JSON.parse(content), listFiles)
+                .then((result: GoogleDriveFilesProp[]) => resolve(result))
+                .catch(err => console.log('error', err));
         });
     })
 }
@@ -108,9 +110,9 @@ function listFiles(auth, callback) {
         (err, res) => {
             if (err) return console.log("The API returned an error: " + err);
             const files = res.data.files;
-            const folders : GoogleDriveFilesProp[] = [];
+            const folders: GoogleDriveFilesProp[] = [];
             if (files.length) {
-                files.map((file : GoogleDriveFilesProp) => {
+                files.map((file: GoogleDriveFilesProp) => {
                     folders.push(file);
                 });
                 return callback(folders);
