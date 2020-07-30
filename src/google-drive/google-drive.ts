@@ -26,14 +26,18 @@ interface GoogleDriveFilesProp {
 
 export function GetFiles(): Promise<GoogleDriveFilesProp[]> {
     return new Promise(async (resolve, reject) => {
-        // Load client secrets from a local file.
-        fs.readFile(process.env.GOOGLE_DRIVE_CRED, "utf8", (err, content) => {
-            if (err) return console.log("Error loading client secret file:", err);
-            // Authorize a client with credentials, then call the Google Drive API.
-            authorize(JSON.parse(content), listFiles)
-                .then((result: GoogleDriveFilesProp[]) => resolve(result))
-                .catch(err => console.log('error', err));
-        });
+        try {
+            // Load client secrets from a local file.
+            fs.readFile(process.env.GOOGLE_DRIVE_CRED, "utf8", (err, content) => {
+                if (err) return console.log("Error loading client secret file:", err);
+                // Authorize a client with credentials, then call the Google Drive API.
+                authorize(JSON.parse(content), listFiles)
+                    .then((result: GoogleDriveFilesProp[]) => resolve(result))
+                    .catch(err => console.log('error', err));
+            });
+        } catch (err) {
+            console.log('error', err);
+        }
     })
 }
 
@@ -45,20 +49,24 @@ export function GetFiles(): Promise<GoogleDriveFilesProp[]> {
  */
 function authorize(credentials, callback) {
     return new Promise(async (resolve, reject) => {
-        const {client_secret, client_id, redirect_uris} = credentials.web;
-        const oAuth2Client = new google.auth.OAuth2(
-            client_id,
-            client_secret,
-            redirect_uris[0]
-        );
-        // Check if we have previously stored a token.
-        fs.readFile(path.join(__dirname + '/token.json'), "utf8", (err, token) => {
-            if (err) return getAccessToken(oAuth2Client, callback);
-            oAuth2Client.setCredentials(JSON.parse(token));
-            callback(oAuth2Client, result => {
-                return resolve(result);
-            })
-        });
+        try {
+            const {client_secret, client_id, redirect_uris} = credentials.web;
+            const oAuth2Client = new google.auth.OAuth2(
+                client_id,
+                client_secret,
+                redirect_uris[0]
+            );
+            // Check if we have previously stored a token.
+            fs.readFile(path.join(__dirname + '/token.json'), "utf8", (err, token) => {
+                if (err) return getAccessToken(oAuth2Client, callback);
+                oAuth2Client.setCredentials(JSON.parse(token));
+                callback(oAuth2Client, result => {
+                    return resolve(result);
+                })
+            });
+        } catch (err) {
+            console.log('error', err);
+        }
     })
 }
 
