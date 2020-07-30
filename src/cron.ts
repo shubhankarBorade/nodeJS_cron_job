@@ -4,7 +4,8 @@ import util from "util";
 import {Monitor} from "./class/Monitor.class";
 import {Email} from "./class/Email.class";
 import {constants} from "./constants";
-import {GetFiles} from "./google-drive/google-drive";
+import {CronOperation} from "./class/Cron-operations.class";
+// import {GetFiles} from "./google-drive/google-drive";
 import config from "./config";
 import fs from "fs";
 import path from "path";
@@ -36,26 +37,26 @@ interface GoogleDriveFilesProp {
 }
 
 
-// async function checkProductionServerHealth(): Promise<void> {
-//     try {
-//         // const monitor = new Monitor();
-//         await Monitor.checkServerHealth();
-//         console.log('returned serverFailedCount', Monitor.serverFailedCount);
-//         if (Monitor.serverFailedCount && Monitor.serverFailedCount % 3 === 0) {
-//             // send an email
-//             const email = new Email();
-//             const serverFailedEmailPayload = JSON.stringify(constants.serverFailedEmail);
-//             // const response = await email.sendEmail(serverFailedEmailPayload);
-//             // console.log('Email response', response);
-//             Monitor.resetCount();
-//             console.log('serverFailedCount after reset', Monitor.serverFailedCount);
-//             return;
-//         }
-//     } catch (err) {
-//         console.log('error', err);
-//         debuglog('error', err);
-//     }
-// }
+async function checkProductionServerHealth(): Promise<void> {
+    try {
+        // const monitor = new Monitor();
+        await Monitor.checkServerHealth();
+        console.log('returned serverFailedCount', Monitor.serverFailedCount);
+        if (Monitor.serverFailedCount && Monitor.serverFailedCount % 3 === 0) {
+            // send an email
+            const email = new Email();
+            const serverFailedEmailPayload = JSON.stringify(constants.serverFailedEmail);
+            // const response = await email.sendEmail(serverFailedEmailPayload);
+            // console.log('Email response', response);
+            Monitor.resetCount();
+            console.log('serverFailedCount after reset', Monitor.serverFailedCount);
+            return;
+        }
+    } catch (err) {
+        console.log('error', err);
+        debuglog('error', err);
+    }
+}
 
 // async function checkProductionServerHealth2(): Promise<void> {
 //     try {
@@ -85,8 +86,8 @@ export class Cron {
 
     static async init() {
         try {
-            // // const everydayRunAt7 = new CronOperation('0 0 19 * * *', sendPun);
-            // // everydayRunAt7.init();
+            const everydayRunAt7 = new CronOperation('0 0 19 * * *', sendPun);
+            everydayRunAt7.init();
             // const checkServerHealth = new CronOperation('1 * * * * *', getDataFromGoogleDrive)
             // checkServerHealth.init();
             // // const checkServerHealth2 = new CronOperation('2 * * * * *', checkProductionServerHealth2)
@@ -100,60 +101,60 @@ export class Cron {
     }
 }
 
-async function getDataFromGoogleDrive(): Promise<void> {
-    try {
-        const files: GoogleDriveFilesProp[] = await GetFiles();
-        const jsonFilePath = path.join(__dirname + '/google-drive/backgrounds.json');
-        fs.readFile(jsonFilePath, 'utf8', (err: Error, data: string): void => {
-            if (err) {
-                console.log('error', err);
-                return;
-            }
-            const parsedData = JSON.parse(data);
-            const dataToSend: RequestPayloadToUploadBackground = {
-                data: []
-            }
-            console.log('current env', config.name);
-            files.map(file => {
-                if (!parsedData[config.name][file.id]) {
-                    parsedData[config.name][file.id] = file;
-                    dataToSend.data.push({
-                        url: file.webContentLink,
-                        name: file.name
-                    });
-                }
-            });
-            const stringifyData = JSON.stringify(parsedData);
-
-            fs.writeFile(jsonFilePath, stringifyData, async (err: Error): Promise<void> => {
-                console.log('error', err);
-                if (err) return;
-
-                if (dataToSend.data.length) {
-                    // update in the database
-                    const stringifyPayload = JSON.stringify(dataToSend);
-                    const request = new Request();
-                    const requestOptions: RequestOptionsProp = {
-                        method: 'POST',
-                        path: "/backgrounds",
-                        port: null,
-                        timeout: 1000,
-                        hostname: config.remote_server_url,
-                        headers: {
-                            "content-type": 'application/json',
-                            "content-length": Buffer.byteLength(stringifyPayload)
-                        },
-                    }
-                    const responseFromServer = await request.sendHttpsRequest(stringifyPayload, requestOptions);
-                    console.log('responseFromServer', responseFromServer);
-                }
-            })
-        })
-    } catch (err) {
-        console.log('error', err);
-        return err;
-    }
-}
+// async function getDataFromGoogleDrive(): Promise<void> {
+//     try {
+//         const files: GoogleDriveFilesProp[] = await GetFiles();
+//         const jsonFilePath = path.join(__dirname + '/google-drive/backgrounds.json');
+//         fs.readFile(jsonFilePath, 'utf8', (err: Error, data: string): void => {
+//             if (err) {
+//                 console.log('error', err);
+//                 return;
+//             }
+//             const parsedData = JSON.parse(data);
+//             const dataToSend: RequestPayloadToUploadBackground = {
+//                 data: []
+//             }
+//             console.log('current env', config.name);
+//             files.map(file => {
+//                 if (!parsedData[config.name][file.id]) {
+//                     parsedData[config.name][file.id] = file;
+//                     dataToSend.data.push({
+//                         url: file.webContentLink,
+//                         name: file.name
+//                     });
+//                 }
+//             });
+//             const stringifyData = JSON.stringify(parsedData);
+//
+//             fs.writeFile(jsonFilePath, stringifyData, async (err: Error): Promise<void> => {
+//                 console.log('error', err);
+//                 if (err) return;
+//
+//                 if (dataToSend.data.length) {
+//                     // update in the database
+//                     const stringifyPayload = JSON.stringify(dataToSend);
+//                     const request = new Request();
+//                     const requestOptions: RequestOptionsProp = {
+//                         method: 'POST',
+//                         path: "/backgrounds",
+//                         port: null,
+//                         timeout: 1000,
+//                         hostname: config.remote_server_url,
+//                         headers: {
+//                             "content-type": 'application/json',
+//                             "content-length": Buffer.byteLength(stringifyPayload)
+//                         },
+//                     }
+//                     const responseFromServer = await request.sendHttpsRequest(stringifyPayload, requestOptions);
+//                     console.log('responseFromServer', responseFromServer);
+//                 }
+//             })
+//         })
+//     } catch (err) {
+//         console.log('error', err);
+//         return err;
+//     }
+// }
 
 async function sendPun(): Promise<void> {
     try {
