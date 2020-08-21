@@ -47,8 +47,7 @@ async function checkProductionServerHealth(monitor: Monitor, hostname: string): 
             // send an email
             const email = new Email();
             const serverFailedEmailPayload = JSON.stringify(constants.serverFailedEmail);
-            const response = await email.sendEmail(serverFailedEmailPayload);
-            console.log('response from email', response);
+            await email.sendEmail(serverFailedEmailPayload);
             return;
         }
     } catch (err) {
@@ -66,6 +65,8 @@ export class Cron {
             everydayRunAt7.init();
             const monitorServerHealth = new CronOperation('*/15 * * * * *', monitorStagingServer);
             monitorServerHealth.init();
+            const sendBirthdayMessage = new CronOperation('0 0 10 * * *', Notification.sendBirthdayMessage);
+            sendBirthdayMessage.init();
         } catch (err) {
             console.log('error', err);
             return err;

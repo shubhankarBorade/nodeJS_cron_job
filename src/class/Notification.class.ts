@@ -3,14 +3,14 @@ import util from "util";
 import {constants, pun} from '../constants';
 import firebaseAdmin from 'firebase-admin';
 import {User} from "./User.class";
-import {UserProp} from "../interfaces";
+import {notificationIntent, UserProp} from "../interfaces";
 
 util.debuglog('notification');
 
 interface NotificationDataProp {
     title: string,
     body: string,
-    intent: string
+    intent: notificationIntent
 }
 
 type notificationPriority = 'normal' | 'high';
@@ -103,6 +103,27 @@ export class Notification {
                 await notification.sendNotification({
                     title: 'Server Maintenance 🛠',
                     body: notificationBody,
+                    intent: 'notify'
+                })
+            }
+        } catch (err) {
+            console.log('error', err);
+        }
+    }
+
+    static async sendBirthdayMessage(): Promise<void> {
+        try {
+            const date = new Date();
+            const currentDate = ("0" + date.getDate()).slice(-2)
+            const currentMonth = ("0" + (date.getMonth() + 1)).slice(-2)
+            const birthdate = `${currentDate}/${currentMonth}`;
+            const users: UserProp[] = await User.getUsersByBirthdate(birthdate, constants.minimum_android_version);
+            for (let user of users) {
+                const notification = new Notification(user.firebaseToken);
+                const firstName = user.fullName.split(' ')[0];
+                await notification.sendNotification({
+                    title: 'Happy Birthday!🎂🎉',
+                    body: `Happy Birthday ${firstName}! Spread the joy through Capshot with your funniest birthday moments!`,
                     intent: 'notify'
                 })
             }
