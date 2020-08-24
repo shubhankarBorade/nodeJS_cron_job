@@ -122,7 +122,7 @@ export class Notification {
                 const notification = new Notification(user.firebaseToken);
                 const firstName = user.fullName.split(' ')[0];
                 await notification.sendNotification({
-                    title: 'Happy Birthday!🎂🎉',
+                    title: 'It’s your birthday!🎂🎉',
                     body: `Happy Birthday ${firstName}! Spread the joy through Capshot with your funniest birthday moments!`,
                     intent: 'notify'
                 })
