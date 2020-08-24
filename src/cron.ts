@@ -34,7 +34,7 @@ async function checkProductionServerHealth(monitor: Monitor, hostname: string): 
 
         if (monitor.serverFailedCount === 6) {
             // send the notification
-            await Notification.onServerDown();
+            // await Notification.onServerDown();
         }
 
         if (monitor.serverFailedCount && monitor.serverFailedCount % 3 !== 0) {
