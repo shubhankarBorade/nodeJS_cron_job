@@ -38,6 +38,7 @@ type BucketProp = 'indians' | 'internationals';
 
 export class Notification {
     private readonly firebaseToken: string;
+    private static punIndex: number = 0
 
     /**
      *
@@ -133,11 +134,19 @@ export class Notification {
     }
 
     static getRandomPun(bucket: BucketProp) {
-        function getRandomInt(max: number): number {
-            return Math.floor(Math.random() * Math.floor(max));
+        // function getRandomInt(max: number): number {
+        //     return Math.floor(Math.random() * Math.floor(max));
+        // }
+        //
+        // const randomNumber = getRandomInt(constants.availableBuckets[bucket].length)
+        // return pun[bucket][randomNumber];
+        const puns: string[] = pun[bucket];
+        const foundPun: string | undefined = puns[this.punIndex];
+        if (foundPun) {
+            this.punIndex += 1;
+            return foundPun
         }
-
-        const randomNumber = getRandomInt(constants.availableBuckets[bucket].length)
-        return pun[bucket][randomNumber];
+        this.punIndex = 1
+        return puns[0];
     }
 }
